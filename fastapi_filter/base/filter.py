@@ -103,7 +103,7 @@ class BaseFilterModel(BaseModel, extra="forbid"):
         duplicated_field_names = set()
 
         for field_name_with_direction in value:
-            field_name = field_name_with_direction.replace("-", "").replace("+", "")
+            field_name = field_name_with_direction.replace(":asc", "").replace(":desc", "")
 
             if not hasattr(cls.Constants.model, field_name):
                 raise ValueError(f"{field_name} is not a valid ordering field.")

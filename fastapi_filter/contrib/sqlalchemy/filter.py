@@ -132,10 +132,16 @@ class Filter(BaseFilterModel):
             return query
 
         for field_name in self.ordering_values:
-            direction = Filter.Direction.asc
-            if field_name.startswith("-"):
-                direction = Filter.Direction.desc
-            field_name = field_name.replace("-", "").replace("+", "")
+            if ":" in field_name:
+                field_name, direction = field_name.split(":")
+                direction = Filter.Direction(direction.lower())
+            else:
+                direction = Filter.Direction.asc
+                if field_name.startswith("-"):
+                    direction = Filter.Direction.desc
+                    field_name = field_name[1:]
+                elif field_name.startswith("+"):
+                    field_name = field_name[1:]
 
             order_by_field = getattr(self.Constants.model, field_name)
 
